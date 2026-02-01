@@ -76,9 +76,9 @@ jobs:
           name: HelloABI-${{ matrix.configuration }}-x64
           if-no-files-found: error
           path: |
-            bin/${{ matrix.configuration }}/static/**/*.lib
-            bin/${{ matrix.configuration }}/dynamic/**/*.dll
-            bin/${{ matrix.configuration }}/dynamic/**/*.lib
-            bin/${{ matrix.configuration }}/dynamic/**/*.pdb
+            bin/x64/${{ matrix.configuration }}/static/**/*.lib
+            bin/x64/${{ matrix.configuration }}/dynamic/**/*.dll
+            bin/x64/${{ matrix.configuration }}/dynamic/**/*.lib
+            bin/x64/${{ matrix.configuration }}/dynamic/**/*.pdb
             include/**/*.h
             include/**/*.hpp
