@@ -12,6 +12,8 @@ project "HelloABI.StaticLib"
     language "C++"
     cppdialect "C++23"
 
+    defines { "HELLOABI_STATIC" }
+
     targetdir ("bin/%{cfg.platform}/%{cfg.buildcfg}/static")
     objdir    ("bin-int/%{cfg.platform}/%{cfg.buildcfg}/static")
 
@@ -31,6 +33,8 @@ project "HelloABI.DynamicLib"
     kind "SharedLib"
     language "C++"
     cppdialect "C++23"
+
+    defines { "HELLOABI_DYNAMIC", "HELLOABI_EXPORTS" }
 
     targetdir ("bin/%{cfg.platform}/%{cfg.buildcfg}/dynamic")
     objdir    ("bin-int/%{cfg.platform}/%{cfg.buildcfg}/dynamic")

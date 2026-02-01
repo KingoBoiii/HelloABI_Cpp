@@ -1,8 +1,8 @@
 #include "../include/lib.h"
 
-#include <print>
+#include <cstdio>
 
 extern "C" void say_hello()
 {
-    std::printf("Hello from the shared library!");
+    std::printf("Hello from the library!\n");
 }
