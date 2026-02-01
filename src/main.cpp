@@ -1,4 +1,3 @@
-#include <iostream>
 #include <print>
 
 extern "C" void say_hello()
