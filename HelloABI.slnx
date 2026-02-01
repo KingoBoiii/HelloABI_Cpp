@@ -2,7 +2,7 @@
   <Configurations>
     <BuildType Name="Debug" />
     <BuildType Name="Release" />
-    <Platform Name="Win32" />
+    <Platform Name="x64" />
   </Configurations>
   <Project Path="HelloABI.DynamicLib.vcxproj" Id="EFAF870A-5B11-6518-E47E-ABCA50DF9BD7">
   </Project>

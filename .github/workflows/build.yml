@@ -1,0 +1,55 @@
+name: Build (Premake5)
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [Debug, Release]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Premake5
+        shell: pwsh
+        run: |
+          choco install premake5 -y
+          premake5 --version
+
+      - name: Generate Visual Studio 2022 files
+        shell: pwsh
+        run: premake5 vs2022
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build solution (x64)
+        shell: pwsh
+        run: |
+          $sln = Get-ChildItem -Path . -Filter *.sln | Select-Object -First 1
+          if (-not $sln) { throw "No .sln found. Did premake5 vs2022 run successfully?" }
+
+          msbuild $sln.FullName `
+            /m `
+            /p:Configuration=${{ matrix.configuration }} `
+            /p:Platform=x64
+
+      - name: Upload artifacts (.lib/.dll + headers)
+        uses: actions/upload-artifact@v4
+        with:
+          name: HelloABI-${{ matrix.configuration }}-x64
+          if-no-files-found: error
+          path: |
+            bin/${{ matrix.configuration }}/static/**/*.lib
+            bin/${{ matrix.configuration }}/dynamic/**/*.dll
+            bin/${{ matrix.configuration }}/dynamic/**/*.lib
+            bin/${{ matrix.configuration }}/dynamic/**/*.pdb
+            include/**/*.h
+            include/**/*.hpp
