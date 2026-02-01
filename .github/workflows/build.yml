@@ -11,6 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        platform: [x64]
         configuration: [Debug, Release]
 
     env:
@@ -59,7 +60,7 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Build solution (x64)
+      - name: Build solution (${{ matrix.platform }})
         shell: pwsh
         run: |
           $sln = Get-ChildItem -Path . -Filter *.sln | Select-Object -First 1
@@ -68,17 +69,17 @@ jobs:
           msbuild $sln.FullName `
             /m `
             /p:Configuration=${{ matrix.configuration }} `
-            /p:Platform=x64
+            /p:Platform=${{ matrix.platform }}
 
       - name: Upload artifacts (.lib/.dll + headers)
         uses: actions/upload-artifact@v4
         with:
-          name: HelloABI-${{ matrix.configuration }}-x64
+          name: HelloABI-${{ matrix.platform }}-${{ matrix.configuration }}
           if-no-files-found: error
           path: |
-            bin/x64/${{ matrix.configuration }}/static/**/*.lib
-            bin/x64/${{ matrix.configuration }}/dynamic/**/*.dll
-            bin/x64/${{ matrix.configuration }}/dynamic/**/*.lib
-            bin/x64/${{ matrix.configuration }}/dynamic/**/*.pdb
+            bin/${{ matrix.platform }}/${{ matrix.configuration }}/static/**/*.lib
+            bin/${{ matrix.platform }}/${{ matrix.configuration }}/dynamic/**/*.dll
+            bin/${{ matrix.platform }}/${{ matrix.configuration }}/dynamic/**/*.lib
+            bin/${{ matrix.platform }}/${{ matrix.configuration }}/dynamic/**/*.pdb
             include/**/*.h
             include/**/*.hpp
